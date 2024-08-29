@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: fintech-password
+      MYSQL_DATABASE: loan_engine_db
+      MYSQL_USERNAME: fintech-user
+      MYSQL_PASSWORD: fintech-password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  fintech:
+    # build: .
+    image: accalina/fintech-loan:1.0
+    container_name: fintech-loan
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
