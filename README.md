@@ -23,6 +23,7 @@ This is a simple loan engine application built using GoFiber with clean architec
 - [License](#license)
 - [Security Assessment](#security-assessment)
     - [Testing XSS](#testing-xss)
+    - [Container Image Security assement (docker)](#container-image-security-assement)
     - [Testing for known security vulnerability](#testing-for-known-security-vulnerability)
 
 ## Prerequisites
@@ -339,6 +340,21 @@ http://192.168.50.161:8080/customers/">bdc3505125c02acf6782cbc55c910984/transact
 - Accur: 0.0 %
 
 ===========================================================================
+```
+
+### Container Image Security assement
+This scan will asess secirity on the docker container 
+```lua
+2024-08-30T03:14:37.841+0700    INFO    Vulnerability scanning is enabled
+2024-08-30T03:14:37.841+0700    INFO    Secret scanning is enabled
+2024-08-30T03:14:37.841+0700    INFO    If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2024-08-30T03:14:38.043+0700    INFO    Detected OS: debian
+2024-08-30T03:14:38.043+0700    INFO    Detecting Debian vulnerabilities...
+2024-08-30T03:14:38.043+0700    INFO    Number of language-specific files: 0
+
+accalina/fintech-loan:1.0 (debian 12.5)
+
+Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
 ```
 
 ### Testing for known security vulnerability
