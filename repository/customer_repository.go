@@ -20,7 +20,19 @@ func NewCustomerRepository(db *gorm.DB) CustomerRepository {
 }
 
 func (r *customerRepository) CreateCustomer(customer *entity.DetailCustomer) error {
-	return r.db.Create(customer).Error
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Create(&customer).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 func (r *customerRepository) GetCustomerByID(NIK string) (*entity.DetailCustomer, error) {

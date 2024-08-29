@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"mf-loan/entity"
 	"mf-loan/repository"
 )
@@ -19,7 +20,10 @@ func NewCustomerUseCase(repo repository.CustomerRepository) CustomerUseCase {
 }
 
 func (u *customerUseCase) CreateCustomer(customer *entity.DetailCustomer) error {
-	return u.customerRepo.CreateCustomer(customer)
+	if err := u.customerRepo.CreateCustomer(customer); err != nil {
+		return errors.New("failed to create customer: " + err.Error())
+	}
+	return nil
 }
 
 func (u *customerUseCase) GetCustomerByID(NIK string) (*entity.DetailCustomer, error) {

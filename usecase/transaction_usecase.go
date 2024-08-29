@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"mf-loan/entity"
 	"mf-loan/repository"
 )
@@ -12,13 +13,19 @@ type TransactionUseCase interface {
 
 type transactionUseCase struct {
 	transactionRepo repository.TransactionRepository
+	customerRepo    repository.CustomerRepository
 }
 
-func NewTransactionUseCase(repo repository.TransactionRepository) TransactionUseCase {
-	return &transactionUseCase{transactionRepo: repo}
+func NewTransactionUseCase(trRepo repository.TransactionRepository, customerRepo repository.CustomerRepository) TransactionUseCase {
+	return &transactionUseCase{transactionRepo: trRepo, customerRepo: customerRepo}
 }
 
 func (u *transactionUseCase) CreateTransaction(transaction *entity.TransactionDetail) error {
+	// Check if user is on our db
+	customer, err := u.customerRepo.GetCustomerByID(transaction.CustomerID)
+	if err != nil || customer == nil {
+		return errors.New("customer not found")
+	}
 	return u.transactionRepo.CreateTransaction(transaction)
 }
 

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"mf-loan/entity"
 
 	"gorm.io/gorm"
@@ -22,7 +23,26 @@ func NewTenorRepository(db *gorm.DB) TenorRepository {
 }
 
 func (r *tenorRepository) CreateTenor(tenor *entity.Tenor) error {
-	return r.db.Create(tenor).Error
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// Validation: Check if there's an existing tenor with the same customer_id and month_number and isLunas is false
+	var existingTenor entity.Tenor
+	if err := tx.Where("id_customer = ? AND month_number = ? AND is_lunas = ?", tenor.CustomerID, tenor.MonthNumber, false).First(&existingTenor).Error; err == nil {
+		tx.Rollback()
+		return errors.New("a non-paid tenor with the same month number already exists for this customer")
+	}
+
+	if err := tx.Create(&tenor).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 func (r *tenorRepository) GetTenorsByCustomerID(customerID string) ([]entity.Tenor, error) {
@@ -40,7 +60,17 @@ func (r *tenorRepository) CheckExistingTenor(customerID string, monthNumber int)
 }
 
 func (r *tenorRepository) UpdateIsLunas(tenorID uint) error {
-	return r.db.Model(&entity.Tenor{}).
-		Where("id = ?", tenorID).
-		Update("is_lunas", true).Error
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Model(&entity.Tenor{}).Where("id = ?", tenorID).Update("is_lunas", true).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }

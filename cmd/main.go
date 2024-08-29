@@ -69,12 +69,12 @@ func main() {
 
 	// Tenor components
 	tenorRepo := repository.NewTenorRepository(db)
-	tenorUseCase := usecase.NewTenorUseCase(tenorRepo)
+	tenorUseCase := usecase.NewTenorUseCase(tenorRepo, customerRepo)
 	http.NewTenorHandler(app, tenorUseCase)
 
 	// Transaction components
 	transactionRepo := repository.NewTransactionRepository(db)
-	transactionUseCase := usecase.NewTransactionUseCase(transactionRepo)
+	transactionUseCase := usecase.NewTransactionUseCase(transactionRepo, customerRepo)
 	http.NewTransactionHandler(app, transactionUseCase)
 
 	app.Listen(":8080")

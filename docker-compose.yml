@@ -16,7 +16,7 @@ services:
 
   fintech:
     # build: .
-    image: accalina/fintech-loan:1.0
+    image: accalina/fintech-loan:1.1
     container_name: fintech-loan
     ports:
       - "8080:8080"
