@@ -20,7 +20,19 @@ func NewTransactionRepository(db *gorm.DB) TransactionRepository {
 }
 
 func (r *transactionRepository) CreateTransaction(transaction *entity.TransactionDetail) error {
-	return r.db.Create(transaction).Error
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Create(&transaction).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 func (r *transactionRepository) GetTransactionsByCustomerID(customerID string) ([]entity.TransactionDetail, error) {

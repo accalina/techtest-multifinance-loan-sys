@@ -1,5 +1,5 @@
 # techtest-multifinance-loan-sys
-This is a simple loan engine application built using GoFiber with clean architecture principles. The app uses MySQL as the database, with GORM as the ORM.
+This is a simple loan engine application built using GoFiber with clean architecture principles. The app uses MySQL as the database, with GORM as the ORM with ACID compliance.
 
 ## Table of Contents
 
@@ -169,34 +169,12 @@ $ make test
 ### Usage Example
 
 ### Customer
-#### Create Customer
+#### **Create Customer**
 
 - **URL:** `/customers`
 - **Method:** `POST`
 - **Content-Type:** `application/json`
 - **Body Example:**
-```json
-{
-  "NIK": "1234567890123456",
-  "FullName": "John Doe",
-  "LegalName": "Johnathan Doe",
-  "TempatLahir": "Jakarta",
-  "TanggalLahir": "1990-01-01",
-  "Gaji": 15000000,
-  "FotoKTP": "/path/to/ktp.jpg",
-  "FotoSelfie": "/path/to/selfie.jpg"
-}
-```
-
-#### Get Customer by ID
-
-- **URL:** `/customers/:id`
-- **Method:** `GET`
-- **URL Params:**
-    - `id=[string]` (NIK of the customer)
-
-
-1. **Create a customer:**
 ```bash
 $ curl -X POST http://localhost:8080/customers \
 -H "Content-Type: application/json" \
@@ -211,11 +189,18 @@ $ curl -X POST http://localhost:8080/customers \
     "foto_selfie": "/path/to/selfie.jpg"
 }'
 ```
-    
-2. **Retrieve customer details by NIK:**
+
+#### **Retrieve customer details by NIK:**
+
+- **URL:** `/customers/:id`
+- **Method:** `GET`
+- **URL Params:**
+    - `id=[string]` (NIK of the customer)
+
 ```bash
 $ curl -X GET http://localhost:8080/customers/1234567890123456
 ```
+
 ### Tenor
 #### Create Tenor
 - **URL:** `/tenors`
