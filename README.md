@@ -9,7 +9,7 @@ This is a simple loan engine application built using GoFiber with clean architec
 - [Database Schema](#database-schema)
 - [Configuration](#configuration)
 - [Running the Application](#running-the-application)
--
+- [Testing the Application](#testing-the-application)
 - [API Endpoints](#api-endpoints)
     - [Create a Customer](#create-customer)
     - [Get Customer by ID](#get-customer-by-id)
@@ -23,7 +23,7 @@ This is a simple loan engine application built using GoFiber with clean architec
 - [License](#license)
 - [Security Assessment](#security-assessment)
     - [Testing XSS](#testing-xss)
-    - [Testing for known security vulnerability](#Testing-for-known-security-vulnerability)
+    - [Testing for known security vulnerability](#testing-for-known-security-vulnerability)
 
 ## Prerequisites
 
@@ -43,7 +43,7 @@ $ cd techtest-multifinance-loan-sys
 2. **Set up environment variables:** Create a `.env` file in the root directory and add MySQL connection details:
 
 ```dotenv
-DB_DSN="username:password@tcp(127.0.0.1:3306)/loan_engine_db?charset=utf8mb4&parseTime=True&loc=Local"
+DB_DSN="root:fintech-password@tcp(mysql:3306)/loan_engine_db?charset=utf8mb4&parseTime=True&loc=Local"
 ```
     
 3. **Install Go modules:**
@@ -121,11 +121,20 @@ The database schema consists of three tables:
 The configuration is managed using environment variables. The main configuration file is located in `config/config.go`. Ensure you have a `.env` file with the following content:
 
 ```dotenv
-DB_DSN="username:password@tcp(127.0.0.1:3306)/loan_engine_db?charset=utf8mb4&parseTime=True&loc=Local"
+DB_DSN="root:fintech-password@tcp(mysql:3306)/loan_engine_db?charset=utf8mb4&parseTime=True&loc=Local"
 ```
 
 ## Running the Application
 
+### Running via Docker
+If you have docker and docker-compose installed you can run the image with the following command:
+
+```bash
+$ docker-compose up -d
+```
+the service will be build alongside mysql, so its ready to use on port 8080
+
+### Running Manually
 You can run the application with the following command:
 
 ```bash
@@ -146,14 +155,12 @@ You can test the application with the following command:
 
 ```bash
 $ go test mf-loan/delivery/http/tests mf-loan/repository/tests mf-loan/usecase/tests -v
-
 ```
 
 or if you want to use Makefile config you can do with following command
 
 ```bash
 $ make test
-
 ```
 
 ## API Endpoints
