@@ -18,6 +18,14 @@ func NewTransactionHandler(app *fiber.App, useCase usecase.TransactionUseCase) {
 	app.Get("/customers/:customer_id/transactions", handler.GetTransactionsByCustomerID)
 }
 
+// @Description	Create a new Tenor.
+// @Summary		Create a new Tenor
+// @Tags		Trasaction
+// @Accept		json
+// @Produce		json
+// @Param		Customer	body		entity.TransactionDetail	true	"Tenor attribute"
+// @Success		200		{object}	entity.TransactionDetail
+// @Router		/transactions [post]
 func (h *TransactionHandler) CreateTransaction(c *fiber.Ctx) error {
 	transaction := new(entity.TransactionDetail)
 	if err := c.BodyParser(transaction); err != nil {
@@ -31,6 +39,14 @@ func (h *TransactionHandler) CreateTransaction(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(transaction)
 }
 
+// @Summary			Get Trasaction Detail
+// @Description		Get Trasaction by NIK.
+// @Tags			Trasaction
+// @Accept			json
+// @Produce			json
+// @Param        	customer_id	path     string  false  "NIK Customer"
+// @Success			200		{array}		[]entity.TransactionDetail
+// @Router			/customers/{customer_id}/transactions [get]
 func (h *TransactionHandler) GetTransactionsByCustomerID(c *fiber.Ctx) error {
 	customerID := c.Params("customer_id")
 	transactions, err := h.useCase.GetTransactionsByCustomerID(customerID)

@@ -12,6 +12,7 @@ COPY ./entity entity
 COPY ./infra infra
 COPY ./repository repository
 COPY ./usecase usecase
+COPY ./docs docs
 
 RUN apk add upx util-linux-dev build-base
 RUN go mod download
@@ -24,5 +25,6 @@ RUN echo 'DB_DSN="root:fintech-password@tcp(mysql:3306)/loan_engine_db?charset=u
 FROM gcr.io/distroless/static:latest AS runtimeStage
 WORKDIR /app
 COPY --from=buildStage /fintech/fintech-app .
+COPY --from=buildStage /fintech/docs docs
 COPY --from=buildStage /fintech/temp.conn .env
 ENTRYPOINT ["/app/fintech-app"]

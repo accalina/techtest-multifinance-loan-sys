@@ -1,0 +1,235 @@
+basePath: /
+definitions:
+  entity.CustomerPayload:
+    properties:
+      foto_ktp:
+        type: string
+      foto_selfie:
+        type: string
+      full_name:
+        type: string
+      gaji:
+        type: number
+      legal_name:
+        type: string
+      nik:
+        type: string
+      tanggal_lahir:
+        description: Date as string from JSON
+        type: string
+      tempat_lahir:
+        type: string
+    type: object
+  entity.DetailCustomer:
+    properties:
+      foto_ktp:
+        type: string
+      foto_selfie:
+        type: string
+      full_name:
+        type: string
+      gaji:
+        type: number
+      legal_name:
+        type: string
+      nik:
+        type: string
+      tanggal_lahir:
+        type: string
+      tempat_lahir:
+        type: string
+    type: object
+  entity.Tenor:
+    properties:
+      customer_id:
+        type: string
+      is_lunas:
+        type: boolean
+      limit:
+        type: number
+      month_number:
+        type: integer
+      tenor_id:
+        type: integer
+    type: object
+  entity.TransactionDetail:
+    properties:
+      admin_fee:
+        type: number
+      asset_name:
+        type: string
+      customer_id:
+        type: string
+      installment_amount:
+        type: number
+      interest_amount:
+        type: number
+      otr_price:
+        type: number
+      transaction_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a swagger for Fintech API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fintech API
+  version: "1.0"
+paths:
+  /customers:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Customer.
+      parameters:
+      - description: Customer attribute
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CustomerPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.DetailCustomer'
+      summary: Create a new Customer
+      tags:
+      - Customer
+  /customers/{customer_id}/tenors:
+    get:
+      consumes:
+      - application/json
+      description: Get Customer by NIK.
+      parameters:
+      - description: NIK Customer
+        in: path
+        name: customer_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.DetailCustomer'
+            type: array
+      summary: Get Customer Detail
+      tags:
+      - Customer
+  /customers/{customer_id}/transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get Trasaction by NIK.
+      parameters:
+      - description: NIK Customer
+        in: path
+        name: customer_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entity.TransactionDetail'
+              type: array
+            type: array
+      summary: Get Trasaction Detail
+      tags:
+      - Trasaction
+  /customers/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Customer by NIK.
+      parameters:
+      - description: NIK Customer
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.DetailCustomer'
+            type: array
+      summary: Get Customer Detail
+      tags:
+      - Customer
+  /tenors:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Tenor.
+      parameters:
+      - description: Tenor attribute
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Tenor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Tenor'
+      summary: Create a new Tenor
+      tags:
+      - Tenor
+  /tenors/{id}/lunas:
+    patch:
+      consumes:
+      - application/json
+      description: Update Tenor to Lunas.
+      parameters:
+      - description: NIK Customer
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Update Tenor to Lunas
+      tags:
+      - Tenor
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Tenor.
+      parameters:
+      - description: Tenor attribute
+        in: body
+        name: Customer
+        required: true
+        schema:
+          $ref: '#/definitions/entity.TransactionDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.TransactionDetail'
+      summary: Create a new Tenor
+      tags:
+      - Trasaction
+swagger: "2.0"

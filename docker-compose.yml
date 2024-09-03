@@ -15,8 +15,8 @@ services:
       retries: 10
 
   fintech:
-    # build: .
-    image: accalina/fintech-loan:1.1
+    build: .
+    image: accalina/fintech-loan:1.3
     container_name: fintech-loan
     ports:
       - "8080:8080"
