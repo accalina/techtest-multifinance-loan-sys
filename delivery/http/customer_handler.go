@@ -19,6 +19,14 @@ func NewCustomerHandler(app *fiber.App, useCase usecase.CustomerUseCase) {
 	app.Get("/customers/:id", handler.GetCustomerByID)
 }
 
+// @Summary			Get Customer Detail
+// @Description		Get Customer by NIK.
+// @Tags			Customer
+// @Accept			json
+// @Produce			json
+// @Param        	id	path     string  false  "NIK Customer"
+// @Success			200		{array}		entity.DetailCustomer
+// @Router			/customers/{id} [get]
 func (h *CustomerHandler) GetCustomerByID(c *fiber.Ctx) error {
 	id := c.Params("id")
 	customer, err := h.useCase.GetCustomerByID(id)
@@ -28,6 +36,14 @@ func (h *CustomerHandler) GetCustomerByID(c *fiber.Ctx) error {
 	return c.JSON(customer)
 }
 
+// @Description	Create a new Customer.
+// @Summary		Create a new Customer
+// @Tags		Customer
+// @Accept		json
+// @Produce		json
+// @Param		Customer	body		entity.CustomerPayload	true	"Customer attribute"
+// @Success		200		{object}	entity.DetailCustomer
+// @Router		/customers [post]
 func (h *CustomerHandler) CreateCustomer(c *fiber.Ctx) error {
 	var customerPayload = new(entity.CustomerPayload)
 	if err := c.BodyParser(&customerPayload); err != nil {
